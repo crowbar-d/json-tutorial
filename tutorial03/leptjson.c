@@ -4,6 +4,8 @@
 #include <math.h>    /* HUGE_VAL */
 #include <stdlib.h>  /* NULL, malloc(), realloc(), free(), strtod() */
 #include <string.h>  /* memcpy() */
+#include <stdbool.h>
+#include <stdio.h>
 
 #ifndef LEPT_PARSE_STACK_INIT_SIZE
 #define LEPT_PARSE_STACK_INIT_SIZE 256
@@ -91,8 +93,13 @@ static int lept_parse_string(lept_context* c, lept_value* v) {
     const char* p;
     EXPECT(c, '\"');
     p = c->json;
+
     for (;;) {
         char ch = *p++;
+        if (!is_valid_char(ch)) {
+            printf("%d is invalid\n", ch);
+            return LEPT_PARSE_INVALID_STRING_ESCAPE;
+        }
         switch (ch) {
             case '\"':
                 len = c->top - head;
@@ -153,12 +160,18 @@ lept_type lept_get_type(const lept_value* v) {
 }
 
 int lept_get_boolean(const lept_value* v) {
-    /* \TODO */
-    return 0;
+    assert(v != NULL && (v->type == LEPT_TRUE || v->type == LEPT_FALSE));
+    return v->type == LEPT_TRUE ? 1 : 0;
 }
 
 void lept_set_boolean(lept_value* v, int b) {
-    /* \TODO */
+    assert(v != NULL);
+    lept_free(v);
+    if (b) {
+        v->type = LEPT_TRUE;
+    } else {
+        v->type = LEPT_FALSE;
+    }
 }
 
 double lept_get_number(const lept_value* v) {
@@ -167,7 +180,9 @@ double lept_get_number(const lept_value* v) {
 }
 
 void lept_set_number(lept_value* v, double n) {
-    /* \TODO */
+    assert(v != NULL);
+    v->type = LEPT_NUMBER;
+    v->u.n = n;
 }
 
 const char* lept_get_string(const lept_value* v) {
@@ -188,4 +203,19 @@ void lept_set_string(lept_value* v, const char* s, size_t len) {
     v->u.s.s[len] = '\0';
     v->u.s.len = len;
     v->type = LEPT_STRING;
+}
+
+bool is_valid_char(const char c) {
+    return c > 31 || is_valid_escape(c); 
+}
+
+bool is_valid_escape(const char c) {
+    const char validEscapes[] = {'\0', '\"', '\\', '\b', '\f', '\n', '\r', '\t'};
+    int len = sizeof(validEscapes);
+    for (int i = 0; i < len; i++) {
+        if (c == validEscapes[i]) {
+            return true;
+        }
+    }
+    return false;
 }

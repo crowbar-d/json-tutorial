@@ -102,6 +102,7 @@ static void test_parse_number() {
         EXPECT_EQ_INT(LEPT_STRING, lept_get_type(&v));\
         EXPECT_EQ_STRING(expect, lept_get_string(&v), lept_get_string_length(&v));\
         lept_free(&v);\
+        fprintf(stdout, "passed, %s %s \n", expect, json);\
     } while(0)
 
 static void test_parse_string() {
@@ -121,6 +122,7 @@ static void test_parse_string() {
         EXPECT_EQ_INT(error, lept_parse(&v, json));\
         EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));\
         lept_free(&v);\
+        fprintf(stdout, "passed, %d %s \n", error, json);\
     } while(0)
 
 static void test_parse_expect_value() {
@@ -182,18 +184,35 @@ static void test_access_null() {
     lept_value v;
     lept_init(&v);
     lept_set_string(&v, "a", 1);
-    lept_set_null(&v);
-    EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
+    lept_set_boolean(&v, 1);
+    EXPECT_TRUE(lept_get_boolean(&v));
+    lept_set_boolean(&v, 0);
+    EXPECT_FALSE(lept_get_boolean(&v));
     lept_free(&v);
 }
 
 static void test_access_boolean() {
-    /* \TODO */
+    lept_value v;
+    lept_init(&v);
+    lept_set_boolean(&v, true);
+
+    EXPECT_TRUE(lept_get_boolean(&v));
+
+    lept_set_boolean(&v, false);
+
+    EXPECT_FALSE(lept_get_boolean(&v));
+    lept_free(&v);
+
     /* Use EXPECT_TRUE() and EXPECT_FALSE() */
 }
 
 static void test_access_number() {
-    /* \TODO */
+    lept_value v;
+    lept_init(&v);
+    
+    lept_set_number(&v, 100);
+    EXPECT_EQ_INT(lept_get_number(&v), 100);
+
 }
 
 static void test_access_string() {

@@ -10,9 +10,9 @@ static int test_pass = 0;
 #define EXPECT_EQ_BASE(equality, expect, actual, format) \
     do {\
         test_count++;\
-        if (equality)\
+        if (equality) {\
             test_pass++;\
-        else {\
+        } else {\
             fprintf(stderr, "%s:%d: expect: " format " actual: " format "\n", __FILE__, __LINE__, expect, actual);\
             main_ret = 1;\
         }\
@@ -48,6 +48,7 @@ static void test_parse_false() {
         EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, json));\
         EXPECT_EQ_INT(LEPT_NUMBER, lept_get_type(&v));\
         EXPECT_EQ_DOUBLE(expect, lept_get_number(&v));\
+        fprintf(stdout, "passed, %f %s \n", expect, json);\
     } while(0)
 
 static void test_parse_number() {

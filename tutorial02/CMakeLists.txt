@@ -1,8 +1,10 @@
 cmake_minimum_required (VERSION 2.6)
 project (leptjson_test C)
 
+message(STATUS "CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
+
 if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ansi -pedantic -Wall")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic -Wall -g")
 endif()
 
 add_library(leptjson leptjson.c)

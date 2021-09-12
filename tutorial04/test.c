@@ -106,19 +106,21 @@ static void test_parse_number() {
         EXPECT_EQ_INT(LEPT_STRING, lept_get_type(&v));\
         EXPECT_EQ_STRING(expect, lept_get_string(&v), lept_get_string_length(&v));\
         lept_free(&v);\
+        fprintf(stdout, "passed, %s %s \n", expect, json);\
     } while(0)
 
 static void test_parse_string() {
-    TEST_STRING("", "\"\"");
-    TEST_STRING("Hello", "\"Hello\"");
-    TEST_STRING("Hello\nWorld", "\"Hello\\nWorld\"");
-    TEST_STRING("\" \\ / \b \f \n \r \t", "\"\\\" \\\\ \\/ \\b \\f \\n \\r \\t\"");
-    TEST_STRING("Hello\0World", "\"Hello\\u0000World\"");
-    TEST_STRING("\x24", "\"\\u0024\"");         /* Dollar sign U+0024 */
-    TEST_STRING("\xC2\xA2", "\"\\u00A2\"");     /* Cents sign U+00A2 */
-    TEST_STRING("\xE2\x82\xAC", "\"\\u20AC\""); /* Euro sign U+20AC */
-    TEST_STRING("\xF0\x9D\x84\x9E", "\"\\uD834\\uDD1E\"");  /* G clef sign U+1D11E */
-    TEST_STRING("\xF0\x9D\x84\x9E", "\"\\ud834\\udd1e\"");  /* G clef sign U+1D11E */
+    // TEST_STRING("", "\"\"");
+    // TEST_STRING("Hello", "\"Hello\"");
+    // TEST_STRING("Hello\nWorld", "\"Hello\\nWorld\"");
+    // TEST_STRING("\" \\ / \b \f \n \r \t", "\"\\\" \\\\ \\/ \\b \\f \\n \\r \\t\"");
+    // TEST_STRING("Hello\0World", "\"Hello\\u0000World\"");
+    // TEST_STRING("\x24", "\"\\u0024\"");         /* Dollar sign U+0024 */
+    // TEST_STRING("\xC2\xA2", "\"\\u00A2\"");     /* Cents sign U+00A2 */
+    // TEST_STRING("\xE2\x82\xAC", "\"\\u20AC\""); /* Euro sign U+20AC */
+    // TEST_STRING("\xF0\x9D\x84\x9E", "\"\\uD834\\uDD1E\"");  /* G clef sign U+1D11E */
+    // TEST_STRING("\xF0\x9D\x84\x9E", "\"\\ud834\\udd1e\"");  /* G clef sign U+1D11E */
+    TEST_STRING("\xF0\x9D\x84\x9E", "\"𝄞\"");  /* G clef sign U+1D11E */
 }
 
 #define TEST_ERROR(error, json)\
@@ -129,6 +131,7 @@ static void test_parse_string() {
         EXPECT_EQ_INT(error, lept_parse(&v, json));\
         EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));\
         lept_free(&v);\
+        fprintf(stdout, "passed, %d %s \n", error, json);\
     } while(0)
 
 static void test_parse_expect_value() {
@@ -206,20 +209,20 @@ static void test_parse_invalid_unicode_surrogate() {
 }
 
 static void test_parse() {
-    test_parse_null();
-    test_parse_true();
-    test_parse_false();
-    test_parse_number();
+    // test_parse_null();
+    // test_parse_true();
+    // test_parse_false();
+    // test_parse_number();
     test_parse_string();
-    test_parse_expect_value();
-    test_parse_invalid_value();
-    test_parse_root_not_singular();
-    test_parse_number_too_big();
-    test_parse_missing_quotation_mark();
-    test_parse_invalid_string_escape();
-    test_parse_invalid_string_char();
-    test_parse_invalid_unicode_hex();
-    test_parse_invalid_unicode_surrogate();
+    // test_parse_expect_value();
+    // test_parse_invalid_value();
+    // test_parse_root_not_singular();
+    // test_parse_number_too_big();
+    // test_parse_missing_quotation_mark();
+    // test_parse_invalid_string_escape();
+    // test_parse_invalid_string_char();
+    // test_parse_invalid_unicode_hex();
+    // test_parse_invalid_unicode_surrogate();
 }
 
 static void test_access_null() {

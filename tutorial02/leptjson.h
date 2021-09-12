@@ -22,4 +22,7 @@ lept_type lept_get_type(const lept_value* v);
 
 double lept_get_number(const lept_value* v);
 
+#define ISDIGIT(ch)         ((ch) >= '0' && (ch) <= '9')
+#define ISDIGIT1TO9(ch)     ((ch) >= '1' && (ch) <= '9')
+
 #endif /* LEPTJSON_H__ */
